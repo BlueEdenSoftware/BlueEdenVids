@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="70%">
+      <stop offset="0" stop-color="#16294a"/>
+      <stop offset="1" stop-color="#070d1c"/>
+    </radialGradient>
+    <linearGradient id="earthA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3fc1c9"/>
+      <stop offset="1" stop-color="#1b5f8c"/>
+    </linearGradient>
+    <linearGradient id="earthB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2a65a"/>
+      <stop offset="1" stop-color="#b8502e"/>
+    </linearGradient>
+    <clipPath id="cA"><circle cx="430" cy="512" r="250"/></clipPath>
+    <clipPath id="cB"><circle cx="594" cy="512" r="250"/></clipPath>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <g fill="#ffffff" opacity="0.7">
+    <circle cx="140" cy="170" r="3"/><circle cx="860" cy="140" r="2.5"/><circle cx="900" cy="820" r="3"/>
+    <circle cx="120" cy="860" r="2"/><circle cx="760" cy="230" r="2"/><circle cx="250" cy="300" r="1.8"/>
+    <circle cx="820" cy="560" r="1.6"/><circle cx="200" cy="640" r="1.6"/>
+  </g>
+  <!-- Earth B (warm, the parallel one) -->
+  <circle cx="594" cy="512" r="250" fill="url(#earthB)"/>
+  <g clip-path="url(#cB)" fill="#7a2e1c" opacity="0.55">
+    <polygon points="560,330 680,300 760,380 700,440 600,420"/>
+    <polygon points="620,520 760,500 800,610 700,680 640,620"/>
+    <polygon points="480,600 560,580 590,700 500,740"/>
+  </g>
+  <!-- Earth A (blue, ours) -->
+  <circle cx="430" cy="512" r="250" fill="url(#earthA)"/>
+  <g clip-path="url(#cA)" fill="#2f8f4e" opacity="0.9">
+    <polygon points="300,330 420,300 470,370 410,430 320,410"/>
+    <polygon points="380,500 500,470 540,570 460,650 390,600"/>
+    <polygon points="230,560 300,540 320,640 250,690"/>
+  </g>
+  <g clip-path="url(#cA)" fill="#ffffff" opacity="0.10">
+    <polygon points="180,260 680,260 180,760"/>
+  </g>
+  <!-- overlap highlight -->
+  <g clip-path="url(#cA)">
+    <circle cx="594" cy="512" r="250" fill="none" stroke="#f2a65a" stroke-width="10" opacity="0.95"/>
+  </g>
+  <circle cx="430" cy="512" r="250" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.35"/>
+</svg>
