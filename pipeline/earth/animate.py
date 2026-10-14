@@ -1,5 +1,6 @@
 # Video #3: What if Earth stopped spinning for 5 seconds?
-# Run: Blender -b ~/ParallelEarth/renders/park_hero.blend -P pipeline/earth/animate.py
+# Run: Blender -b ~/ParallelEarth/renders/street_hero.blend -P pipeline/earth/animate.py
+# Street runs east-west, camera looks west (+Y), so east is -Y: everything flies at the camera.
 # Physics: in New York (40.7 N) the ground moves east at 1,674 * cos(40.7) = ~1,270 km/h (353 m/s).
 # Earth stops, everything loose keeps that speed. Scene time 6-12 s is slow motion x50
 # (0.12 s real), so the visible speed is 353 / 50 = ~7 m/s. At 12 s we cut to real time: all gone.
@@ -7,7 +8,8 @@ import bpy, os, math, random
 
 FPS, DUR = 24, 24
 T_STOP, T_SLOW_END = 6.0, 12.0
-V = 353.0 / 50          # visible slow-motion speed, m/s, toward +X (east)
+V = 353.0 / 50          # visible slow-motion speed, m/s
+EAST = (0.0, -1.0)
 OUT = os.path.expanduser("~/ParallelEarth/renders/earth/f_")
 random.seed(5)
 
@@ -28,7 +30,7 @@ loose = []
 for e in bpy.data.objects:
     if e.instance_type == "COLLECTION" and e.instance_collection:
         name = e.instance_collection.name
-        if name.startswith(("building", "low-detail")): continue        # skyline stays
+        if name.startswith(("building", "low-detail", "light", "traffic")): continue   # bolted down
         kind = "person" if action_of(e.instance_collection) else ("tree" if name.startswith("tree") else "prop")
         loose.append((e, kind))
     elif e.name.startswith("bench"):
@@ -58,23 +60,23 @@ for e, kind in loose:
     dist = vx * max(0.0, t - delay)
     if delay:
         e.location = (x0, y0, z0); key(e, int((T_STOP + delay) * FPS))
-    e.location = (x0 + dist, y0 + random.uniform(-1, 1), z0 + (0.6 if kind == "person" else 1.5) * t)
+    side = random.uniform(-1, 1)
+    e.location = (x0 + EAST[0] * dist + side, y0 + EAST[1] * dist, z0 + (0.6 if kind == "person" else 0.25) * t)
     e.rotation_euler = (r0[0] + random.uniform(-1, 1) * 4, r0[1] + random.uniform(2, 6) * (1 if kind != "tree" else 0.4), r0[2])
     key(e, int(T_SLOW_END * FPS))
-    e.location = (x0 + 5000, y0, z0); key(e, int(T_SLOW_END * FPS) + 1)   # real time: long gone
+    e.location = (x0 + EAST[0] * 5000, y0 + EAST[1] * 5000, z0); key(e, int(T_SLOW_END * FPS) + 1)   # real time: long gone
     key(e, FPS * DUR)
 
-# slow push-in, then a hard shake when the planet stops
+# camera high above the street, slow push, hard shake when the planet stops
 cam = sc.camera
-cam.location = (-0.4, -6, 8.0); cam.keyframe_insert("location", frame=1)
-cam.location = (-0.4, -4.5, 7.7); cam.keyframe_insert("location", frame=int(T_STOP * FPS))
+cam.location = (0, -14, 9); cam.keyframe_insert("location", frame=1)
+cam.location = (0, -12, 9); cam.keyframe_insert("location", frame=int(T_STOP * FPS))
 for i in range(1, 30):
-    f = int(T_STOP * FPS) + i
     a = 0.35 * (1 - i / 30)
-    cam.location = (-0.4 + random.uniform(-a, a), -4.5 + random.uniform(-a, a), 7.7 + random.uniform(-a, a))
-    cam.keyframe_insert("location", frame=f)
-cam.location = (-0.4, -4.5, 7.7); cam.keyframe_insert("location", frame=int(T_STOP * FPS) + 31)
-cam.location = (-0.4, -1.0, 7.2); cam.keyframe_insert("location", frame=FPS * DUR)
+    cam.location = (random.uniform(-a, a), -12 + random.uniform(-a, a), 9 + random.uniform(-a, a))
+    cam.keyframe_insert("location", frame=int(T_STOP * FPS) + i)
+cam.location = (0, -12, 9); cam.keyframe_insert("location", frame=int(T_STOP * FPS) + 31)
+cam.location = (0, -8, 8.5); cam.keyframe_insert("location", frame=FPS * DUR)
 
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 if os.environ.get("TEST"):

@@ -20,9 +20,9 @@ TITLE = "What if Earth\nstopped spinning\nfor 5 seconds?"
 CAPTIONS = [
     (1.5, 6.0, "In New York, the ground is moving\neast at 1,270 km/h right now."),
     (6.0, 8.5, "Earth stops.\nEverything on it doesn't."),
-    (8.5, 12.0, "1,270 km/h sideways.\nFaster than sound."),
+    (8.5, 12.0, "Everything flies east\nat 1,270 km/h.\nFaster than sound."),
     (12.0, T_ON, "Real time: it took 0.1 seconds."),
-    (T_ON, 20.0, "The spin is back.\nThe park isn't."),
+    (T_ON, 20.0, "The spin is back.\nThe street isn't."),
     (20.0, 24.0, "What would you grab onto?"),
 ]
 
